@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class CalculatorMainActivity extends AppCompatActivity {
 
@@ -20,7 +18,7 @@ public class CalculatorMainActivity extends AppCompatActivity {
     private TextView resultText;
     private String operationSign = "";
     private String total = "";
-    private final static String SAVED_VAL = "savedVal";
+    private final static String SAVED_VAL1 = "savedVal1";
     private final static String SAVED_VAL2 = "savedVal2";
     private final static String SAVED_VAL3 = "savedVal3";
     private final static String SAVED_VAL4 = "savedVal4";
@@ -53,10 +51,17 @@ public class CalculatorMainActivity extends AppCompatActivity {
         numberBtn8 = (Button) findViewById(R.id.btnNumber8);
         numberBtn9 = (Button) findViewById(R.id.btnNumber9);
 
+        //restore the previously saved data
         if (savedInstanceState != null){
             resultNum1 = savedInstanceState.getDouble(SAVED_VAL2);
             resultNum2 = savedInstanceState.getDouble(SAVED_VAL3);
             operationSign = savedInstanceState.getString(SAVED_VAL4);
+            resultText.setText(savedInstanceState.getString(SAVED_VAL1));
+        } else{
+            resultNum1 = 0.0;
+            resultNum2 = 0.0;
+            operationSign = "";
+            resultText.setText("");
         }
 
         //set button event handlers
@@ -140,10 +145,7 @@ public class CalculatorMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String strVal = resultText.getText().toString();
-                strVal.split(strVal);
-
-                Character val = strVal.charAt(strVal.length()-1);
-                resultText.setText(val.toString());
+                resultText.setText(strVal.substring(0, strVal.length()-1));
             }
         });
 
@@ -158,8 +160,8 @@ public class CalculatorMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 resultNum1 = Double.parseDouble(resultText.getText().toString());
-                resultText.setText("");
                 operationSign ="+";
+                resultText.setText("");
             }
         });
 
@@ -167,8 +169,8 @@ public class CalculatorMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 resultNum1 = Double.parseDouble(resultText.getText().toString());
-                resultText.setText("");
                 operationSign ="-";
+                resultText.setText("");
             }
         });
 
@@ -176,8 +178,8 @@ public class CalculatorMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 resultNum1 = Double.parseDouble(resultText.getText().toString());
-                resultText.setText("");
                 operationSign ="*";
+                resultText.setText("");
             }
         });
 
@@ -192,15 +194,14 @@ public class CalculatorMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 resultNum1 = Double.parseDouble(resultText.getText().toString());
-                resultText.setText("");
                 operationSign ="/";
+                resultText.setText("");
             }
         });
 
         equalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TextView resOutput = (TextView) findViewById(R.id.resultTextView);
                 resultNum2 = Double.parseDouble(resultText.getText().toString());
 
                 if (operationSign.equals("+")){
@@ -220,29 +221,25 @@ public class CalculatorMainActivity extends AppCompatActivity {
                         resultText.setText(total);
                     }
                 }
-                operationSign = "";
             }
         });
-
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         outState.putDouble(SAVED_VAL2,resultNum1);
         outState.putDouble(SAVED_VAL3,resultNum2);
         outState.putString(SAVED_VAL4,operationSign);
-        outState.putString(SAVED_VAL, resultText.getText().toString());
+        outState.putString(SAVED_VAL1, resultText.getText().toString());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        savedInstanceState.getDouble(SAVED_VAL3);
         savedInstanceState.getDouble(SAVED_VAL2);
+        savedInstanceState.getDouble(SAVED_VAL3);
         savedInstanceState.getString(SAVED_VAL4);
-        resultText.setText(savedInstanceState.getString(SAVED_VAL));
+        resultText.setText(savedInstanceState.getString(SAVED_VAL1));
     }
-
 }
